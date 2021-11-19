@@ -1,4 +1,6 @@
-/* @flow */
+// @flow
+
+/* eslint-disable react/no-multi-comp */
 
 import React, { Component } from 'react';
 
@@ -161,10 +163,8 @@ class ConferenceInfo extends Component<Props> {
     render() {
         return (
             <div className = 'details-container' >
-                { [
-                    this._renderAlwaysVisible(),
-                    this._renderAutoHide()
-                ] }
+                { this._renderAlwaysVisible() }
+                { this._renderAutoHide() }
             </div>
         );
     }
