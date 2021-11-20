@@ -279,6 +279,7 @@ var config = {
     //     autoHide: true,
     //     autoHideTimeout: 5000,
     //     disabled: false,
+    //     disableDetails: false,
     //     inactiveDisabled: false
     // },
 
@@ -429,6 +430,12 @@ var config = {
     // Hides lobby button
     // hideLobbyButton: false,
 
+    // If Lobby is enabled starts knocking automatically.
+    // autoKnockLobby: false,
+
+    // Hides add breakout room button
+    // hideAddRoomButton: false,
+
     // Require users to always specify a display name.
     // requireDisplayName: true,
 
@@ -476,6 +483,10 @@ var config = {
 
     // When 'true', it shows an intermediate page before joining, where the user can configure their devices.
     // prejoinPageEnabled: false,
+
+    // When 'true', the user cannot edit the display name.
+    // (Mainly useful when used in conjuction with the JWT so the JWT name becomes read only.)
+    // readOnlyName: false,
 
     // If etherpad integration is enabled, setting this to true will
     // automatically open the etherpad when a participant joins.  This
@@ -645,6 +656,9 @@ var config = {
     // Enables sending participants' emails (if available) to callstats and other analytics
     // enableEmailInStats: false,
 
+    // Enables detecting faces of participants and get their expression and send it to other participants
+    // enableFacialRecognition: true,
+
     // Controls the percentage of automatic feedback shown to participants when callstats is enabled.
     // The default value is 100%. If set to 0, no automatic feedback will be requested
     // feedbackPercentage: 100,
@@ -773,6 +787,7 @@ var config = {
     // - 'PARTICIPANT_JOINED_SOUND'
     // - 'PARTICIPANT_LEFT_SOUND'
     // - 'RAISE_HAND_SOUND'
+    // - 'REACTION_SOUND'
     // - 'RECORDING_OFF_SOUND'
     // - 'RECORDING_ON_SOUND'
     // - 'TALK_WHILE_MUTED_SOUND'
@@ -821,6 +836,10 @@ var config = {
     //     format: 'flac'
     //
 
+    // },
+    // e2ee: {
+    //   labels,
+    //   externallyManagedKey: false
     // },
 
     // Options related to end-to-end (participant to participant) ping.
@@ -891,24 +910,64 @@ var config = {
      If there is no url set or there are missing fields, the defaults are applied.
      The config file should be in JSON.
      None of the fields are mandatory and the response must have the shape:
-     {
-         // The domain url to apply (will replace the domain in the sharing conference link/embed section)
-         inviteDomain: 'example-company.org,
-         // The hex value for the colour used as background
-         backgroundColor: '#fff',
-         // The url for the image used as background
-         backgroundImageUrl: 'https://example.com/background-img.png',
-         // The anchor url used when clicking the logo image
-         logoClickUrl: 'https://example-company.org',
-         // The url used for the image used as logo
-         logoImageUrl: 'https://example.com/logo-img.png',
-         // Overwrite for pool of background images for avatars
-         avatarBackgrounds: ['url(https://example.com/avatar-background-1.png)', '#FFF'],
-         // The lobby/prejoin screen background
-         premeetingBackground: 'url(https://example.com/premeeting-background.png)'
-     }
+    {
+        // The domain url to apply (will replace the domain in the sharing conference link/embed section)
+        inviteDomain: 'example-company.org,
+        // The hex value for the colour used as background
+        backgroundColor: '#fff',
+        // The url for the image used as background
+        backgroundImageUrl: 'https://example.com/background-img.png',
+        // The anchor url used when clicking the logo image
+        logoClickUrl: 'https://example-company.org',
+        // The url used for the image used as logo
+        logoImageUrl: 'https://example.com/logo-img.png',
+        // Overwrite for pool of background images for avatars
+        avatarBackgrounds: ['url(https://example.com/avatar-background-1.png)', '#FFF'],
+        // The lobby/prejoin screen background
+        premeetingBackground: 'url(https://example.com/premeeting-background.png)',
+        // A list of images that can be used as video backgrounds.
+        // When this field is present, the default images will be replaced with those provided.
+        virtualBackgrounds: ['https://example.com/img.jpg'],
+        // Object containing a theme's properties. It also supports partial overwrites of the main theme.
+        // For a list of all possible theme tokens and their current defaults, please check:
+        // https://github.com/jitsi/jitsi-meet/tree/master/resources/custom-theme/custom-theme.json
+        // For a short explanations on each of the tokens, please check:
+        // https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/ui/Tokens.js
+        // IMPORTANT!: This is work in progress so many of the various tokens are not yet applied in code
+        // or they are partially applied.
+        customTheme: {
+            palette: {
+                ui01: "orange !important",
+                ui02: "maroon",
+                surface02: 'darkgreen',
+                ui03: "violet",
+                ui04: "magenta",
+                ui05: "blueviolet",
+                field02Hover: 'red',
+                action01: 'green',
+                action01Hover: 'lightgreen',
+                action02Disabled: 'beige',
+                success02: 'cadetblue',
+                action02Hover: 'aliceblue'
+            },
+            typography: {
+                labelRegular: {
+                    fontSize: 25,
+                    lineHeight: 30,
+                    fontWeight: 500
+                }
+            }
+        }
+    }
     */
     // dynamicBrandingUrl: '',
+
+    // When true the user cannot add more images to be used as virtual background.
+    // Only the default ones from will be available.
+    // disableAddingBackgroundImages: false,
+
+    // Disables using screensharing as virtual background.
+    // disableScreensharingVirtualBackground: false,
 
     // Sets the background transparency level. '0' is fully transparent, '1' is opaque.
     // backgroundAlpha: 1,
@@ -964,11 +1023,6 @@ var config = {
     // If set, add a "Open shared document" link to the bottom right menu that
     // will open an etherpad document.
     // etherpad_base: 'https://your-etherpad-installati.on/p/',
-
-    // If etherpad_base is set, and useRoomAsSharedDocumentName is set to true,
-    // open a pad with the name of the room (lowercased) instead of a pad with a
-    // random UUID.
-    // useRoomAsSharedDocumentName: true,
 
     // List of undocumented settings used in jitsi-meet
     /**

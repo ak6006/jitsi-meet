@@ -1,5 +1,5 @@
 // @flow
-import { getLogger } from 'jitsi-meet-logger';
+import { getLogger } from '@jitsi/logger';
 import type { Dispatch } from 'redux';
 
 import UIEvents from '../../../service/UI/UIEvents';
@@ -10,7 +10,7 @@ import {
     sendAnalytics,
     VIDEO_MUTE
 } from '../analytics';
-import { showModeratedNotification } from '../av-moderation/actions';
+import { rejectParticipantAudio, rejectParticipantVideo, showModeratedNotification } from '../av-moderation/actions';
 import { shouldShowModeratedNotification } from '../av-moderation/functions';
 import {
     MEDIA_TYPE,
@@ -103,7 +103,7 @@ export function muteAllParticipants(exclude: Array<string>, mediaType: MEDIA_TYP
         const localId = getLocalParticipant(state).id;
 
         if (!exclude.includes(localId)) {
-            dispatch(muteLocal(true, mediaType, true));
+            dispatch(muteLocal(true, mediaType, mediaType !== MEDIA_TYPE.AUDIO));
         }
 
         getRemoteParticipants(state).forEach((p, id) => {
@@ -112,6 +112,11 @@ export function muteAllParticipants(exclude: Array<string>, mediaType: MEDIA_TYP
             }
 
             dispatch(muteRemote(id, mediaType));
+            if (mediaType === MEDIA_TYPE.AUDIO) {
+                dispatch(rejectParticipantAudio(id));
+            } else {
+                dispatch(rejectParticipantVideo(id));
+            }
         });
     };
 }
