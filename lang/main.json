@@ -39,6 +39,9 @@
     "audioOnly": {
         "audioOnly": "Low bandwidth"
     },
+    "blankPage": {
+        "meetingEnded": "Meeting ended."
+    },
     "breakoutRooms": {
         "defaultName": "Breakout room #{{index}}",
         "mainRoom": "Main room",
@@ -756,7 +759,7 @@
     "profile": {
         "avatar": "avatar",
         "setDisplayNameLabel": "Set your display name",
-        "setEmailInput": "Enter e-mail",
+        "setEmailInput": "Enter email",
         "setEmailLabel": "Set your gravatar email",
         "title": "Profile"
     },
